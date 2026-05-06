@@ -1,6 +1,6 @@
 # run_all.R — orchestrator
 # 1. scrape Camera resoconti for /remigra/i (shell)
-# 2. clone Senato Akoma Ntoso bulk repo (shell, sparse-checkout Leg17–19)
+# 2. clone Senato Akoma Ntoso bulk repo (shell, sparse-checkout Leg18–19)
 # 3. extract Camera hits (R)
 # 4. extract Senato hits (R)
 # 5. attach party affiliation to each hit (R)
@@ -29,7 +29,7 @@ run_step("02 fetch Senato bulk repo", function() {
                      "https://github.com/SenatoDellaRepubblica/AkomaNtosoBulkData.git",
                      RAW_SENATO))
     old_wd <- setwd(RAW_SENATO); on.exit(setwd(old_wd))
-    system2("git", c("sparse-checkout", "set", "Leg17", "Leg18", "Leg19"))
+    system2("git", c("sparse-checkout", "set", "Leg18", "Leg19"))
   } else {
     cat("  Senato repo already cloned — skipping\n")
   }

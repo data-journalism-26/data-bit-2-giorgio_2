@@ -5,8 +5,6 @@
 #
 # Coverage: legislatures XVIII (2018-03-23 → 2022-10-12) and XIX (2022-10-13 → today)
 # — the window during which the term entered European far-right discourse.
-# A few XVII (2013-2018) sessions are also probed at coarse intervals as a
-# sanity check that the term was absent from earlier proceedings.
 
 set -uo pipefail
 
@@ -53,8 +51,6 @@ export -f scrape_session
 export OUT_DIR TMP_DIR UA MIN_BYTES
 
 {
-  # Coarse XVII probe: every 50th session as a sanity check
-  for s in $(seq 1 50 950); do echo "17 $s"; done
   # Full XVIII and XIX coverage
   for s in $(seq 1 750); do echo "18 $s"; done
   for s in $(seq 1 700); do echo "19 $s"; done

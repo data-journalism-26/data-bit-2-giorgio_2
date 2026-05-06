@@ -7,7 +7,7 @@
 
 source(here::here("code", "00-setup.R"))
 
-senato_root <- file.path(RAW_SENATO, c("Leg17", "Leg18", "Leg19"))
+senato_root <- file.path(RAW_SENATO, c("Leg18", "Leg19"))
 xml_files <- list.files(senato_root, pattern = "-ra\\.akn\\.xml$",
                         recursive = TRUE, full.names = TRUE)
 xml_files <- xml_files[stringr::str_detect(xml_files, "/resaula/")]

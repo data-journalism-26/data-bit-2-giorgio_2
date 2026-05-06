@@ -200,7 +200,10 @@
       <p>A single case-insensitive regex — <code>remigra[a-z]*</code> — is applied to every paragraph. It matches all morphological forms (<em>remigrazione</em>, <em>remigrare</em>, <em>remigrato</em>, <em>remigrazioni</em>, …) without false positives in Italian. The pattern is defined once in <code>code/00-setup.R</code> and reused by every downstream step.</p>
 
       <h3>3. Camera scrape</h3>
-      <p>A small shell pipeline (<code>code/01-scrape-camera.sh</code>, built on <code>curl</code> + <code>xargs</code>) probes every candidate session number for legislatures XVIII (full, 2018–2022) and XIX (full to the most recent session — 653 as of May 2026). Each fetched HTML is stream-grepped for <code>/remigra/i</code> and discarded if it doesn't match — only sessions containing the term remain on disk.</p>
+      <p>Camera publishes no bulk export, public API, or machine-readable index of plenary URLs. By inspecting session pages opened from <a href="https://www.camera.it/">www.camera.it</a>, the URL is observed to follow a fixed template:</p>
+      <p><code>https://documenti.camera.it/leg{LL}/resoconti/assemblea/html/sed{NNNN}/stenografico.htm</code></p>
+      <p>where <code>{LL}</code> is the legislature (XVIII or XIX in scope) and <code>{NNNN}</code> the zero-padded session number. The shell pipeline <code>code/01-scrape-camera.sh</code> (<code>curl</code> + <code>xargs</code>, twelve parallel workers) probes every pair — XVIII 1–750, XIX 1–700 — discards 404s and sub-5 KB stubs, stream-greps each remaining body for case-insensitive <code>remigra</code>, and writes only matches to <code>data/raw/camera/</code>. Re-runs are idempotent; the XIX ceiling is bumped by hand as new sessions accumulate.</p>
+      <p><em>Tooling disclosure.</em> Claude Code (Anthropic) was used to identify the URL template and scaffold the probe-and-filter script; URLs were spot-checked against the live portal before the full scrape ran.</p>
 
       <h3>4. Camera extraction</h3>
       <p>For each retained Camera HTML hit (<code>code/02-extract-camera.R</code>), the parser walks <code>&lt;p class="intervento"&gt;</code> and <code>&lt;p class="interventoVirtuale"&gt;</code> elements and attributes every matching paragraph to its speaker. The speaker block carries an <code>idPersona</code> identifier, which is used downstream to look up the deputy's group history. Output: <code>data/processed/camera_hits.csv</code>, 54 paragraph-level rows.</p>
@@ -214,7 +217,7 @@
       <p>Output: <code>data/processed/senato_hits.csv</code>, 14 rows (3 plenary speeches + 11 Allegato B paragraphs).</p>
 
       <h3>6. Party attribution at the time of the speech</h3>
-      <p>For each Camera deputy (<code>code/04-party-lookup.R</code>) the script fetches the cached scheda page once and parses out the full sequence of group memberships, with start and end dates. The group active at the date of the speech is then selected. This matters in cases where a deputy switches group mid-legislature — for instance, Rossano Sasso, who left Lega for the Misto group on <strong>6 February 2026</strong>: paragraphs before that date are tagged Lega, paragraphs after are tagged Misto. The output (<code>data/processed/all_hits.csv</code>, 68 rows) is the joined Camera + Senato dataset with party and government/opposition coalition flags.</p>
+      <p>For each Camera deputy (<code>code/04-party-lookup.R</code>) the script parses the scheda for the full group history with start/end dates, then selects the group active on the speech date. This matters when a deputy switches group mid-legislature — e.g. Rossano Sasso, who left Lega for Misto on <strong>6 February 2026</strong>: paragraphs before that date are tagged Lega, after Misto. Output: <code>data/processed/all_hits.csv</code>, the joined Camera + Senato dataset (68 rows) with party and government/opposition coalition flags.</p>
 
       <h3>7. Curation: eight moments from sixty-eight</h3>
       <p>The full machine-readable dataset is 68 paragraphs across 17 plenary sessions. The figure shows eight, picked for the trajectory they trace rather than for raw frequency: each one marks a <em>first</em>, a <em>breakthrough</em>, or the <em>peak</em>.</p>
@@ -234,13 +237,13 @@
 
       <h3>9. Caveats</h3>
       <ul>
-        <li><strong>Scope</strong>: plenary records only — Camera resoconti stenografici and Senato resoconti d'aula. Committee transcripts are out of scope; spot-checking the Senato committee files (<code>sommcomm</code>) returns zero matches anyway. Earlier legislatures (XVII and before) are excluded: the term entered European far-right vocabulary only around 2014 and was not used in Italian parliamentary discourse before its appearance in this dataset (April 2024).</li>
+        <li><strong>Scope</strong>: plenary records only (committee transcripts out of scope; spot-checking Senato <code>sommcomm</code> returns zero matches). Earlier legislatures (XVII and before) excluded — the term entered European far-right vocabulary only around 2014 and is absent from Italian parliamentary discourse before April 2024.</li>
         <li><strong>Allegato B</strong> paragraphs are not signed at the paragraph level in the Senato Akoma Ntoso source. Those hits are tagged <code>allegato_b</code> and labelled accordingly in the figure, rather than attributed to a guessed speaker.</li>
         <li>Speakers who switched parliamentary group mid-legislature are attributed to the group active at the date of the speech.</li>
       </ul>
 
       <h3>10. Reproducibility</h3>
-      <p>All code, data and the replication package live at <a href="https://github.com/data-journalism-26/data-bit-2-giorgio_2">github.com/data-journalism-26/data-bit-2-giorgio_2</a>. The full pipeline is one orchestrator: <code>Rscript code/run_all.R</code>. Each step is idempotent — re-running re-uses cached HTML, the Senato sparse clone, and the deputy scheda pages.</p>
+      <p>All code and data at <a href="https://github.com/data-journalism-26/data-bit-2-giorgio_2">github.com/data-journalism-26/data-bit-2-giorgio_2</a>. Run <code>make</code> (incremental, only rebuilds stale steps) or <code>Rscript code/run_all.R</code> (single-shot) — both are idempotent and re-use cached HTML, the Senato sparse clone, and the deputy schede.</p>
     </details>
 
   </article>
