@@ -2,7 +2,8 @@
 
 suppressPackageStartupMessages({
   required <- c("httr2", "rvest", "xml2", "stringr", "dplyr", "tidyr",
-                "purrr", "lubridate", "ggplot2", "ggrepel", "scales", "here")
+                "purrr", "lubridate", "ggplot2", "ggrepel", "scales", "here",
+                "svglite")
   missing <- required[!vapply(required, requireNamespace, logical(1), quietly = TRUE)]
   if (length(missing) > 0) {
     message("Installing missing packages: ", paste(missing, collapse = ", "))

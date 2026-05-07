@@ -120,6 +120,27 @@ figure video {
   width: 100%;
   height: auto;
 }
+
+/* Lead image, between byline and lede */
+figure.lead-image {
+  margin: 0 auto 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  max-width: 100%;
+}
+figure.lead-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+figure.lead-image figcaption {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 13px;
+  color: var(--muted);
+  padding: 8px 0 0;
+  text-align: left;
+}
 .chart-svg {
   display: block;
   width: 100%;

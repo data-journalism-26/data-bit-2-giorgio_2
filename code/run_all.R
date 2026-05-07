@@ -40,4 +40,5 @@ run_step("04 extract Senato",  function() source(file.path(PROJECT_ROOT, "code",
 run_step("05 attach parties",  function() source(file.path(PROJECT_ROOT, "code", "04-party-lookup.R")))
 run_step("06 build figure",    function() source(file.path(PROJECT_ROOT, "code", "05-figure.R")))
 
-cat("\n=== done. piece at article.html (figure embedded; no separate raster).\n")
+cat("\n=== done. piece at article.html — quote-timeline embedded inline,",
+    "\n            cumulative chart at assets/figure-cumulative.svg.\n")

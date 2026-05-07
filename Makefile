@@ -5,7 +5,7 @@
 #
 # Targets:
 #   make                 full pipeline -> data/processed/all_hits.csv
-#   make figure          print headline stats (always reruns)
+#   make figure          print headline stats AND build assets/figure-cumulative.svg
 #   make camera          Camera scrape only
 #   make senato          Senato sparse clone only
 #   make refresh-camera  re-probe Camera for new sessions
@@ -24,6 +24,7 @@ SCHEDE_RAW := $(RAW)/schede_camera
 CAMERA_CSV := $(PROCESSED)/camera_hits.csv
 SENATO_CSV := $(PROCESSED)/senato_hits.csv
 ALL_CSV    := $(PROCESSED)/all_hits.csv
+FIGURE_SVG := assets/figure-cumulative.svg
 
 # Marker for "senato sparse clone is in place" — Leg19 exists after the
 # sparse-checkout and not before, matching the heuristic in code/run_all.R.
@@ -65,11 +66,15 @@ $(ALL_CSV): $(CODE)/04-party-lookup.R $(CODE)/00-setup.R $(CAMERA_CSV) $(SENATO_
 
 parties: $(ALL_CSV)
 
-figure: $(ALL_CSV)
+# 05-figure.R prints summary stats and writes assets/figure-cumulative.svg
+# from data/processed/all_hits.csv. Re-renders whenever the CSV changes.
+$(FIGURE_SVG): $(CODE)/05-figure.R $(CODE)/00-setup.R $(ALL_CSV)
 	$(R) $(CODE)/05-figure.R
 
+figure: $(FIGURE_SVG)
+
 clean:
-	rm -f $(CAMERA_CSV) $(SENATO_CSV) $(ALL_CSV)
+	rm -f $(CAMERA_CSV) $(SENATO_CSV) $(ALL_CSV) $(FIGURE_SVG)
 
 clean-cache: clean
 	rm -rf $(CAMERA_RAW) $(SENATO_RAW) $(SCHEDE_RAW)
