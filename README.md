@@ -1,8 +1,8 @@
-# When did "remigrazione" enter the Italian parliament — and who used it?
+# How the word "Remigration" entered the Italian parliament
 
 **Author:** Giorgio Coppola · **Date:** May 2026 · GRAD-E1493 Data Journalism, Hertie School
 
-For two years "remigrazione" — the euphemism for mass forced removal coined by French Identitarians around 2014 and pushed across Europe by Austrian activist Martin Sellner — sat outside Italian plenary debate, except as an insult thrown at the right. Then, on 1 April 2026, an FdI senator embraced it.
+For two years, the word "remigrazione" (remigration) remained a fringe idea and sat outside plenary debate, including in Italy. Then, on 1 April 2026, a Fratelli d'Italia (FdI, "Brothers of Italy") senator reasserted the idea during a public session.
 
 ## 📄 View
 
