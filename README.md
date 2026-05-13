@@ -6,7 +6,7 @@ For two years, the word "remigrazione" (remigration) remained a fringe idea and 
 
 ## 📄 View
 
-**[Open on raw.githack.com](https://raw.githack.com/data-journalism-26/data-bit-2-giorgio_2/main/article.html)** · or open `article.html` directly in any browser — the page is self-contained, no local server needed.
+**[Open on raw.githack.com](https://raw.githack.com/giocopp/Remigration-It-Parl/main/article.html)** · or open `article.html` directly in any browser — the page is self-contained, no local server needed.
 
 ## Layout
 
